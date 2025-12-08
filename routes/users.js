@@ -1,18 +1,33 @@
+const express = require('express');
+const router = express.Router();
+
 router.get('/', (req, res)=>{
-    res.render('users/list', {users:users});
+    res.render('users/list', {users: users});
 });
 
 router.get('/new', (req, res)=>{
-    res.send('New User Form');
+    res.render("users/new", {firstName: ""});
 });
 
 router.post('/', (req, res)=>{
     const firstName = req.body.firstName;
-    const isValid = firstName !== ""; //Check if they are there, added
+    const lastName = req.body.lastName;
+    const age = req.body.age;
+    const gender = req.body.gender;
+
+    const isValid = firstName !== "" && lastName !== "";
+
     if(isValid)
     {
-        console.log(`Adding user: ${firstName}`);
-        users.push({name:firstName});
+        console.log(`Adding User: ${firstName}`);
+
+        users.push({
+            firstName: firstName,
+            lastName: lastName,
+            gender: gender,
+            age: age,
+        });
+
         console.log(`New Set of Users: ${users}`);
         res.send("User Created!");
     }
@@ -22,18 +37,43 @@ router.post('/', (req, res)=>{
     }
 });
 
-// router.get('/:id', (req, res)=>{
-//     res.send(`Getting User data: ${req.params.id}`);
-// });
-router.route('/:id').get((req, res)=>{
+router.route("/:id")
+.get((req, res)=>{
     res.send(`Getting User data: ${req.params.id}`);
-}).delete((req, res)=>{
+})
+.delete((req, res)=>{
     res.send(`Deleting user with id: ${req.params.id}`);
-}).put((req, res)=>{
+})
+.put((req, res)=>{
     res.send(`Updating user with id: ${req.params.id}`);
 });
 
-const users =[ {name:"George"},{name:"Justyna"} ];
+const users = [
+    {
+        firstName:"George",
+        lastName:"Salayka",
+        age:40,
+        gender:"Male",
+    },
+    {
+        firstName:"George",
+        lastName:"Salayka",
+        age:40,
+        gender:"Male",
+    },
+    {
+        firstName:"George",
+        lastName:"Salayka",
+        age:40,
+        gender:"Male",
+    },
+    {
+        firstName:"George",
+        lastName:"Salayka",
+        age:40,
+        gender:"Male",
+    }
+];
 
 router.param("id", (req, res, next, id)=>{
     console.log(`Accessing user #${id}`);
